@@ -5,6 +5,9 @@ from app.services.utils import hash
 from app.database import get_db
 from app.schemas import UserCreate, UserOutput
 from app.services.oauth2 import get_current_user
+from starlette import status
+
+# from fastapi import Form
 
 router = APIRouter(prefix='/user', tags=['User'])
 
@@ -34,3 +37,13 @@ def user_get(db: Depends = Depends(get_db), user: UserOutput = Depends(get_curre
     return query.first()
 
 
+@router.delete("/delete")
+def user_get(db: Depends = Depends(get_db), user: UserOutput = Depends(get_current_user)):
+    query = db.query(User).filter(User.email == user.email).first()
+
+    if query is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not Found")
+
+    db.query(User).filter(User.email == user.email).delete()
+    db.commit()
+    return {"message": "successful"}

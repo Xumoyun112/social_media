@@ -4,7 +4,7 @@ from sqlalchemy import and_
 
 from app.models import Post, User
 from app.database import get_db
-from app.schemas import PostCreate, PostOutput, UserOutput
+from app.schemas import PostCreate, PostOutput, UserOutput, PostDetail
 from app.services.oauth2 import get_current_user
 
 router = APIRouter(prefix='/post', tags=['MyPost'])
@@ -53,7 +53,7 @@ def delete_my_post(post_id: int, db=Depends(get_db),
     return {'message': 'post delete successful'}
 
 
-@app.get('/all', status_code=200, response_model=list[PostOutput])
-def post_get_all(db: Depends = Depends(get_db)):
-    post = db.query(Post).all()
+@app.get('/detail', status_code=200, response_model=list[PostDetail])
+def post_get_all(post_id, db: Depends = Depends(get_db)):
+    post = db.query(Post).filter(Post.id == post_id)
     return post

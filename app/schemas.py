@@ -41,3 +41,17 @@ class PostCreate(BaseModel):
     title: str
     content: str
 
+
+class LikeSchama(BaseModel):
+    post_id: int
+
+
+class CommentSchema(BaseModel):
+    post_id: int
+    content: str
+
+
+class PostDetail(PostCreate):
+    id: int
+    comments: list[CommentSchema]
+    # user: UserOutput
