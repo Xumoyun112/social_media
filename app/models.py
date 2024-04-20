@@ -43,3 +43,34 @@ class Like(Base):
     created = Column(DateTime, default=datetime.utcnow)
     post = relationship(Post, backref='likes')
     owner = relationship(User, backref='likes')
+
+
+class Follower(Base):
+    __tablename__ = 'follower'
+    id = Column(Integer, primary_key=True, nullable=False)
+    created = Column(DateTime, default=datetime.utcnow)
+    follower_id = Column(Integer, ForeignKey('users.id'), nullable=False)
+    following_id = Column(Integer, ForeignKey('users.id'), nullable=False)
+    follower = relationship(User, backref='follower')
+    following = relationship(User, backref='following')
+
+
+class Room(Base):
+    __tablename__ = "rooms"
+    id = Column(Integer, primary_key=True, nullable=False)
+    name = Column(String, nullable=False)
+    created = Column(DateTime, default=datetime.utcnow)
+
+
+class Message(Base):
+    __tablename__ = "messages"
+    id = Column(Integer, primary_key=True, nullable=False)
+    room_id = Column(Integer, ForeignKey("rooms.id"), nullable=False)
+    owner_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    content = Column(String, nullable=False)
+    created = Column(DateTime, default=datetime.utcnow)
+    room = relationship(Room, backref="messages")
+    owner = relationship(User, backref="messages")
+
+
+
