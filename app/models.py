@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey
+from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Boolean
 from sqlalchemy.orm import relationship
 
 from .database import Base
@@ -51,8 +51,9 @@ class Follower(Base):
     created = Column(DateTime, default=datetime.utcnow)
     follower_id = Column(Integer, ForeignKey('users.id'), nullable=False)
     following_id = Column(Integer, ForeignKey('users.id'), nullable=False)
-    follower = relationship(User, backref='follower')
-    following = relationship(User, backref='following')
+    is_following = Column(Boolean, default=False)
+    follower = relationship('User', foreign_keys=[follower_id], backref='follower')
+    following = relationship('User', foreign_keys=[following_id], backref='following')
 
 
 class Room(Base):
@@ -71,6 +72,3 @@ class Message(Base):
     created = Column(DateTime, default=datetime.utcnow)
     room = relationship(Room, backref="messages")
     owner = relationship(User, backref="messages")
-
-
-

@@ -55,3 +55,29 @@ class PostDetail(PostCreate):
     id: int
     comments: list[CommentSchema]
     # user: UserOutput
+
+
+class FollowersShema(BaseModel):
+    id: int
+    user: list[UserOutput]
+
+
+class AllFollowerShema(BaseModel):
+    id: int
+    follower: UserOutput
+    is_following: bool
+
+
+class AllFollowingShema(BaseModel):
+    id: int
+    following: UserOutput
+    is_following: bool
+
+
+class RoomCreate(BaseModel):
+    name: str
+
+
+class RoomOutput(RoomCreate):
+    id: int
+    created: datetime
